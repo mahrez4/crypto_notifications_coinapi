@@ -18,15 +18,15 @@ Tested on win11 only.
 
 ## Packages
 
-pip install requests
+```pip install requests```
 
-pip install tkinter
+```pip install tkinter```
 
-pip install customtkinter
+```pip install customtkinter```
 
-pip install resend
+```pip install resend```
 
-pip install plyer
+```pip install plyer```
 
 or use requirements.txt
 
