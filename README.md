@@ -9,14 +9,14 @@ Can be used through a CLI or GUI.
 
 Tested on win11 only.
 
-## Resend API setup:
+### Resend API setup:
 1 - This project uses the resend api to send mail notifications, therefore the user has to create a [Resend](https://resend.com) account to get an API key, the free plan allows the user to send 100 emails daily and 3000 per month. (Preferably open an account with the mail where you wish to receive notifications)
 
 2 - The variable for this is ``RESEND_KEY_API`` which is at the start of the cli_app.py file.
 
 3 - It is important to note that initially you can only use resend to send emails to the mail address with which you have signed up with, but you can add permitted recipients if you have multiple mails where you wish to receive notifications.
 
-## Packages
+### Packages
 
 ```pip install requests```
 
@@ -31,7 +31,7 @@ Tested on win11 only.
 or use requirements.txt
 
 # Usage
-## CLI
+### CLI
 
 ```python cli_app.py```
 
@@ -47,7 +47,7 @@ The user is then presented with a bunch of options
 6. Get price of cryptocurrency
 0. Exit
    
-## GUI
+### GUI
 
 ```python ui_app.py```
 
