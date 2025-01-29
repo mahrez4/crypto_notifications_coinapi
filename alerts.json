@@ -1,0 +1,8 @@
+[
+    {
+        "symbol": "BTC",
+        "condition": "above",
+        "value": "5000",
+        "email": "mahrezbenbia@gmail.com"
+    }
+]
