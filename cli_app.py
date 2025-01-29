@@ -268,7 +268,7 @@ if __name__ == "__main__":
 
     # Instantiate alert manager
     # Loads up existing alerts from alerts.json or is empty if there are no alerts
-    manager = AlertManager("mahrez_alerts.json")
+    manager = AlertManager("alerts.json")
 
     # Start monitoring in a separate thread
     monitor_thread = threading.Thread(target=monitor_prices, args=(coin_api, manager), daemon=True)
