@@ -1,11 +1,20 @@
 [
     {
         "type": "basic",
-        "symbol": "ETH",
+        "symbol": "BTC",
         "condition": "above",
-        "value": "20000",
+        "value": "512032",
         "email": "mahrezbenbia@gmail.com",
-        "date": "2025-01-29,14:52:18",
-        "initial_price": 3095.74360259678
+        "date": "2025-01-29,15:15:05",
+        "initial_price": 101955.525789993
+    },
+    {
+        "type": "percentage_change",
+        "symbol": "ETH",
+        "condition": "decrease",
+        "value": "0.2",
+        "email": "mahrezbenbia@gmail.com",
+        "date": "2025-01-29,15:15:51",
+        "initial_price": 3100.96820269095
     }
 ]

@@ -108,10 +108,9 @@ def send_notification_by_email(to_email, symbol, msg):
 def send_visual_notification(symbol, msg):
     notification.notify(
         title=f"Crypto Alert: {symbol}",
-        message=msg #f"Price has hit {condition}! Current price: {price} USD",
+        message=msg, #f"Price has hit {condition}! Current price: {price} USD",
         timeout=10
     )
-
 
 
 ## Monitoring
@@ -128,7 +127,7 @@ def monitor_prices(api, manager):
             symbol = alert['symbol']
             condition = alert['condition']
             threshold = float(alert['value'])
-            alert_type = alert['alert_type']
+            alert_type = alert['type']
             initial_price = float(alert['initial_price'])
             email = alert.get('email')
             try:
@@ -151,7 +150,16 @@ def monitor_prices(api, manager):
                             msg = f"Alert: {threshold} {condition} of {symbol} from alert creation date."
                             send_visual_notification(symbol, price, msg)
                             if email:
-                                send_email_notification(email, symbol, msg)
+                                send_notification_by_email(email, symbol, msg)
+                    else:
+                        percent_change = ((initial_price - price) / initial_price) * 100
+                        if (condition == "decrease" and percent_change >= threshold):
+                            print(f"Percentage change alert triggered for {symbol}: {percent_change:.2f}% change")
+                            msg = f"Alert: {threshold} {condition} of {symbol} from alert creation date."
+                            send_visual_notification(symbol, price, msg)
+                            if email:
+                                send_notification_by_email(email, symbol, msg)
+                        
                 old_prices[symbol] = price
 
             except Exception as e:
@@ -165,7 +173,7 @@ def monitor_prices(api, manager):
 
 
 def user_input(manager):
-    """Thread to handle user input for alert creation."""
+    """Thread to handle user input for alert creation while monitorning is happening."""
     while True:
         print("\nOptions: ")
         print("1. Create Alert")
@@ -179,12 +187,19 @@ def user_input(manager):
         choice = input("Select an option: ")
         
         if choice == '1':
+            type = input("Enter alert type: (basic / percentage_change): ")
             symbol = input("Enter cryptocurrency symbol (e.g., BTC): ")
-            condition = input("Enter condition (above/below): ")
-            threshold = input("Enter price threshold: ")
-            email = input("Enter email for notifications (leave blank for none): ") or None
+            if type == "basic":
+                condition = input("Enter condition (above/below): ")
+                threshold = input("Enter price threshold: ")
             
-            alert = Alert("basic",symbol, condition, threshold, email)
+            elif type == "percentage_change":
+                condition = input("Enter condition (increase/decrease): ")
+                threshold = input("Enter price change percentage (0-100): ") 
+                
+            
+            email = input("Enter email for notifications (leave blank for none): ") or None
+            alert = Alert(type,symbol, condition, threshold, email)
             manager.create_alert(alert)
             print(f"Alert created for {symbol} {condition} {threshold} USD")
 
@@ -200,6 +215,7 @@ def user_input(manager):
 
         elif choice == '4':
             index = int(input("Enter alert index to modify: "))
+            type = alert['type']
             alert = manager.list_alerts()[index]
             old_sym = alert["symbol"]
             old_cond = alert["condition"]
@@ -209,7 +225,7 @@ def user_input(manager):
             condition = input(f"Enter condition (above/below) (current = {old_cond}): ")
             threshold = input(f"Enter price threshold (current = {old_val}): ")
             email = input(f"Enter email for notifications (current = {old_email}): ") or None
-            alert = Alert("basic", symbol, condition, threshold, email)
+            alert = Alert(type, symbol, condition, threshold, email)
             manager.modify_alert(index,alert)
             print("Alert modified.")
 
