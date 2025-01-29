@@ -1,0 +1,11 @@
+[
+    {
+        "type": "basic",
+        "symbol": "BTC",
+        "condition": "below",
+        "value": "5000",
+        "email": "mahrezbenbia@gmail.com",
+        "date": "2025-01-29,17:00:31",
+        "initial_price": 101923.677408464
+    }
+]

@@ -34,20 +34,20 @@ class Alert:
 # Manage alerts (add, remove, list, edit)
 
 class AlertManager:
-    FILE_PATH = "alerts.json"
 
-    def __init__(self):
+    def __init__(self, path):
+        self.path = path
         self.alerts = self._load_alerts()
 
     def _load_alerts(self):
         try:
-            with open(self.FILE_PATH, 'r') as file:
+            with open(self.path, 'r') as file:
                 return json.load(file)
         except (FileNotFoundError, json.JSONDecodeError):
             return []
         
     def save_alerts(self):
-        with open(self.FILE_PATH, 'w') as file:
+        with open(self.path, 'w') as file:
             json.dump(self.alerts, file, indent = 4)
 
     def create_alert(self, alert: Alert):
@@ -166,6 +166,8 @@ def monitor_prices(api, manager):
                 if symbol not in old_prices:
                     old_prices[symbol] = api.get_price(symbol)
                 else:
+                    print(api.api_key)
+                    print(old_prices)
                     print(f"Error monitoring {symbol}: {e}")
         
         time.sleep(5)
@@ -266,7 +268,7 @@ if __name__ == "__main__":
 
     # Instantiate alert manager
     # Loads up existing alerts from alerts.json or is empty if there are no alerts
-    manager = AlertManager()
+    manager = AlertManager("mahrez_alerts.json")
 
     # Start monitoring in a separate thread
     monitor_thread = threading.Thread(target=monitor_prices, args=(coin_api, manager), daemon=True)

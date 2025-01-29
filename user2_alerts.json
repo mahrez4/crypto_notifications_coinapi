@@ -1,0 +1,11 @@
+[
+    {
+        "type": "basic",
+        "symbol": "BTC",
+        "condition": "above",
+        "value": "5000",
+        "email": "user2@gmail.com",
+        "date": "2025-01-29,17:00:58",
+        "initial_price": 101901.585201882
+    }
+]
