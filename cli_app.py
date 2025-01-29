@@ -189,7 +189,7 @@ def user_input(manager):
         
         if choice == '1':
             type = input("Enter alert type: (basic / percentage_change): ")
-            symbol = input("Enter cryptocurrency symbol (e.g., BTC): ")
+            symbol = input("Enter cryptocurrency symbol (e.g., BTC, ETH, XRP, USDT): ")
             if type == "basic":
                 condition = input("Enter condition (above/below): ")
                 threshold = input("Enter price threshold: ")
@@ -240,13 +240,13 @@ def user_input(manager):
 
         elif choice == '5':
             alerts = manager.list_alerts()
-            symbol = input("Enter cryptocurrency symbol (e.g., BTC): ")
+            symbol = input("Enter cryptocurrency symbol (e.g., BTC, ETH, XRP, USDT): ")
             for i, alert in enumerate(alerts):
                 if alert['symbol'] == symbol:
                     print(f"{i}: {alert}")
 
         elif choice == '6':
-            symbol = input("Enter cryptocurrency symbol (e.g., BTC): ")
+            symbol = input("Enter cryptocurrency symbol (e.g., BTC, ETH, XRP, USDT): ")
             price = coin_api.get_price(symbol)
             print(f"The price of {symbol} is {price}.")
 

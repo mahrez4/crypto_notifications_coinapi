@@ -1,0 +1,38 @@
+[
+    {
+        "type": "basic",
+        "symbol": "BTC",
+        "condition": "above",
+        "value": "50000",
+        "email": "abc@gmail.com",
+        "date": "2025-01-29,16:39:55",
+        "initial_price": 101881.029290315
+    },
+    {
+        "type": "basic",
+        "symbol": "ADA",
+        "condition": "above",
+        "value": "5000",
+        "email": "abc@gmail.com",
+        "date": "2025-01-29,16:40:45",
+        "initial_price": 0.919516979706829
+    },
+    {
+        "type": "basic",
+        "symbol": "ETH",
+        "condition": "above",
+        "value": "4413131",
+        "email": "abc@gmail.com",
+        "date": "2025-01-29,16:41:12",
+        "initial_price": 3103.07708144304
+    },
+    {
+        "type": "percentage_change",
+        "symbol": "ETH",
+        "condition": "decrease",
+        "value": "50",
+        "email": "abc@gmail.com",
+        "date": "2025-01-29,16:41:31",
+        "initial_price": 3102.36268212663
+    }
+]
