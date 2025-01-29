@@ -30,6 +30,15 @@ Tested on win11 only.
 
 or use requirements.txt
 
+# Features
+
+1. Two types of alerts, basic or percentage_change.
+   1. basic: send a notification when the value of a cryptocurrecty goes below or above a certain threshold (in USD)
+   2. percentage change: send a notification when a cryptocurrency increases or decreases by a certain percentage since the alert was created. this type of alert is only triggered once and then deleted.
+2. List alerts: Display all the created alerts.
+3. Delete alert: Delete an alerts that is no longer needed.
+4. Modify alert: Edit the details of an alert.
+   
 # Usage
 ## CLI
 
