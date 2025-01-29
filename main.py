@@ -9,16 +9,17 @@ import threading
 from datetime import datetime, date
 
 API_KEY = 'fceff4f8-c486-4a17-ae1f-312abd7a9858'
+DATE_FORMAT = "%Y-%m-%d,%H:%M:%S"
 
 class Alert:
     def __init__(self, type, symbol, condition, value, email = None):
-        self.type = type # normal or percentage_change
+        self.type = type # basic or percentage_change
         self.symbol = symbol
         self.condition = condition
         self.value = value
         self.email = email
-        self.date = datetime.now()
-        self.price_at_alert_creation = CoinAPI(API_KEY).get_price(self.symbol)
+        self.date = datetime.now().strftime(DATE_FORMAT)
+        self.initial_price = CoinAPI(API_KEY).get_price(self.symbol)
 
     def to_dict(self):
         return {
@@ -28,7 +29,7 @@ class Alert:
             "value": self.value,
             "email": self.email,
             "date": self.date,
-            ""
+            "initial_price": self.initial_price
         }
 
 # Manage alerts (add, remove, list, edit)
@@ -55,7 +56,7 @@ class AlertManager:
             self.alerts.append(alert.to_dict())
             self.save_alerts()
         else:
-            print(f"Alert for {alert.symbol} with condition '{alert.condition}' and value {alert.value} already exists.")
+            print(f"Alert already exists.")
 
     def modify_alert(self, index, alert: Alert):
         if 0 <= index < len(self.alerts):
@@ -91,24 +92,23 @@ class CoinAPI:
         headers = {"X-CoinAPI-Key": self.api_key}
         response = requests.get(url, headers=headers)
         response.raise_for_status()
-        #print(response.json())
         return response.json()['rate']
 
 
 # Notification functions
 
-def send_notification_by_email(to_email, symbol, threshold, price, condition):
+def send_notification_by_email(to_email, symbol, msg):
     r = resend.Emails.send({
         "from": "coinapi_notifs@resend.dev",
         "to": to_email,
         "subject": f"Crypto Alert: {symbol} Price Update",
-        "html": f"Alert: {symbol} is now {condition} the value of {threshold}! The current price is: {price} USD"
+        "html": msg #f"Alert: {symbol} is now {condition} the value of {threshold}! The current price is: {price} USD"
     })
 
-def send_visual_notification(symbol, price, condition):
+def send_visual_notification(symbol, msg):
     notification.notify(
         title=f"Crypto Alert: {symbol}",
-        message=f"Price has hit {condition}! Current price: {price} USD",
+        message=msg #f"Price has hit {condition}! Current price: {price} USD",
         timeout=10
     )
 
@@ -128,15 +128,30 @@ def monitor_prices(api, manager):
             symbol = alert['symbol']
             condition = alert['condition']
             threshold = float(alert['value'])
+            alert_type = alert['alert_type']
+            initial_price = float(alert['initial_price'])
             email = alert.get('email')
             try:
                 price = api.get_price(symbol)
-                if (condition == "above" and price > threshold and old_prices[symbol] < threshold) or (condition == "below" and price < threshold and old_prices[symbol] > threshold):
-                    print(f"Alert triggered for {symbol}: {price} USD")
-                    send_visual_notification(symbol, price, condition)
-                    if email:
-                        send_notification_by_email(email, symbol, threshold, price, condition)
-                #print(old_prices, price)
+
+                if alert_type == "basic":
+                    if (condition == "above" and price > threshold and old_prices[symbol] < threshold) or (condition == "below" and price < threshold and old_prices[symbol] > threshold):
+                        print(f"Alert triggered for {symbol}: {price} USD")
+                        msg = f"Alert: {symbol} is now {condition} the value of {threshold}! The current price is: {price} USD"
+                        send_visual_notification(symbol, msg)
+                        if email:
+                            send_notification_by_email(email, symbol, msg)
+
+                elif alert_type == 'percentage_change':
+                    percent_change = (())
+                    if price > initial_price:
+                        percent_change = ((price - initial_price) / initial_price) * 100
+                        if (condition == "increase" and percent_change >= threshold):
+                            print(f"Percentage change alert triggered for {symbol}: {percent_change:.2f}% change")
+                            msg = f"Alert: {threshold} {condition} of {symbol} from alert creation date."
+                            send_visual_notification(symbol, price, msg)
+                            if email:
+                                send_email_notification(email, symbol, msg)
                 old_prices[symbol] = price
 
             except Exception as e:
